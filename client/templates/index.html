@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename= 'style.css') }}">
+</head>
+<body>
+    <h1>Сгенерируй рандомный видос</h1>
+    <a href="/all">Избранное</a>
+    <button id="gen_btn">Сгенерировать</button>
+    <button id="add">Добавить в избранное</button>
+    
+    <iframe id="video" width="560" height="315" src="https://www.youtube.com/embed/" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    
+    <script src="{{ url_for('static', filename= 'script.js') }}"></script>
+</body>
+</html>

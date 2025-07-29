@@ -1,0 +1,76 @@
+version: '3'
+services:
+  
+  getvideo:
+    depends_on:
+      - jaeger
+    build:
+      context: /getvideo
+      dockerfile: dockerfile
+    environment:
+      - JAGER_HOSTNAME=jaeger
+    ports:
+      - 80:80
+
+  db:
+    depends_on:
+      - jaeger
+    build:
+      context: /db
+      dockerfile: dockerfile
+    ports:
+      - 3000:3000
+  
+  client:
+    depends_on:
+      - keycloak
+      - prometheus
+    build:
+      context: /client
+      dockerfile: dockerfile
+    environment:
+      KEYCLOAK_URL: http://keycloak:8080/
+    ports:
+      - 6969:6969
+
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+
+  grafana:
+    hostname: grafana
+    image: grafana/grafana:8.2.3
+    ports:
+      - 4000:3000
+      
+  keycloak:
+    image: quay.io/keycloak/keycloak
+    ports:
+      - "8080:8080"
+    environment:
+      KEYCLOAK_ADMIN: admin 
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    command: 
+      - start-dev 
+      
+  jaeger:
+    hostname: jaeger
+    image: jaegertracing/all-in-one:1.23
+    ports:
+      - 5775:5775/udp
+      - 6831:6831/udp
+      - 6832:6832/udp
+      - 5778:5778
+      - 16686:16686
+      - 14268:14268
+      - 4250:14250
+      - 9411:9411
+    environment:
+      - COLLECTOR_ZIPKIN_HOST_PORT=:9411
+
+  
+
+  
